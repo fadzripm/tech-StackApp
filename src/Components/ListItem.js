@@ -13,8 +13,14 @@ import {
 
 
 class ListItem extends Component {
+    componentWillUpdate() {
+        if (Platform.OS === 'android') {
+            UIManager.setLayoutAnimationEnabledExperimental(true);
+        }
+        LayoutAnimation.linear();
+    }
     renderDescription() {
-        const { expanded, Library } = this.props;
+        const { expanded, library } = this.props;
 
         if (expanded) {
             return (
@@ -39,21 +45,21 @@ class ListItem extends Component {
             <TouchableWithoutFeedback
                 onPress={() => this.props.selectLibrary(id)}
             >
-            <View>
-                <CardSection>
-                <Text style={styles.titleStyle}>{title}</Text>
-                </CardSection>
-                {this.renderDescription()}
-            </View>
+                <View>
+                    <CardSection>
+                    <Text style={styles.titleStyle}>{title}</Text>
+                    </CardSection>
+                    {this.renderDescription()}
+                </View>
             </TouchableWithoutFeedback>
         );
     }
 }
-
-export default connect(mapStateToProps, actions)(ListItem);
 
 const mapStateToProps = (state, ownProps) => {
     const expanded = state.selectedLibraryId === ownProps.library.id;
 
     return { expanded };
 };
+
+export default connect(mapStateToProps, actions)(ListItem);
